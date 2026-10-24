@@ -1,5 +1,4 @@
 
-
 name: GoRest API CI Pipeline
 
 on:
@@ -27,8 +26,12 @@ jobs:
         env:
           GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
         run: |
-          newman run GoRest_Collection.json \
-            -e GoRest_Enviroment.json \
+          newman run 2373401010431_LeTranHoaiThien_GoRest.postman_collection.json \
+            -e 2373401010431_LeTranHoaiThien_GoRest_Env.postman_environment.json \
             -d users.csv \
+            --folder "Positive_Cases" \
+            --folder "Negative_Cases" \
+            --env-var "BASEURL=https://gorest.co.in/public/v2" \
             --env-var "token=$GOREST_TOKEN" \
-            --reporters cli
+            --reporters cli \
+            --bail failure
