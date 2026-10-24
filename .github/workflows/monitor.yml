@@ -1,4 +1,5 @@
 
+
 name: GoRest Production Monitor
 
 on:
@@ -20,12 +21,12 @@ jobs:
       - name: Install Newman
         run: npm install -g newman
 
-      - name: Run Monitor
+      - name: Run GoRest Production Monitor
         env:
           GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
         run: |
-          newman run "2373401010431_LeTranHoaiThien_GoRest.postman_collection.json" \
-            -e "2373401010431_LeTranHoaiThien_GoRest_Env.postman_environment.json" \
+          newman run ".github/workflows/2373401010431_LeTranHoaiThien_GoRest.postman_collection.json" \
+            -e ".github/workflows/2373401010431_LeTranHoaiThien_GoRest_Env.postman_environment.json" \
             --folder Monitor_Cases \
             --env-var "BASEURL=https://gorest.co.in/public/v2" \
             --env-var "token=$GOREST_TOKEN" \
