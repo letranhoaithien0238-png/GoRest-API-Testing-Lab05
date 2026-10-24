@@ -1,4 +1,0 @@
-name,gender,email,status
-Nguyen An,male,gorest.lab05.{{RUN_ID}}.an@example.com,active
-Tran Binh,female,gorest.lab05.{{RUN_ID}}.binh@example.com,active
-Le Chi,female,gorest.lab05.{{RUN_ID}}.chi@example.com,active
