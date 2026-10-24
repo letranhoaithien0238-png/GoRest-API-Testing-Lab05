@@ -28,6 +28,6 @@ jobs:
           newman run 2373401010431_LeTranHoaiThien_GoRest.postman_collection.json \
             -e 2373401010431_LeTranHoaiThien_GoRest_Env.postman_environment.json \
             -d users.csv \
+            --env-var "BASEURL=https://gorest.co.in/public/v2" \
             --env-var "token=$GOREST_TOKEN" \
             --reporters cli
-
