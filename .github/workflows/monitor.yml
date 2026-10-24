@@ -23,8 +23,13 @@ jobs:
         run: npm install -g newman
 
       - name: Run GoRest Production Monitor
+        env:
+          GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
         run: |
-          newman run GoRest_Collection.json \
-            -e GoRest_Enviroment.json \
-            --folder "Production_Monitor" \
-            --reporters cli
+          newman run 2373401010431_LeTranHoaiThien_GoRest.postman_collection.json \
+            -e 2373401010431_LeTranHoaiThien_GoRest_Env.postman_environment.json \
+            --folder "Monitor_Cases" \
+            --env-var "BASEURL=https://gorest.co.in/public/v2" \
+            --env-var "token=$GOREST_TOKEN" \
+            --reporters cli \
+            --bail failure
