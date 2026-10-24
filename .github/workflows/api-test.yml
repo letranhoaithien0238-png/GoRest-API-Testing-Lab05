@@ -1,37 +1,28 @@
 
 name: GoRest API CI Pipeline
-
 on:
   push:
   pull_request:
   workflow_dispatch:
-
 jobs:
-  api-testing:
+  api-test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
-
+          node-version: '20'
       - name: Install Newman
         run: npm install -g newman
-
-      - name: Run GoRest API Tests
+      - name: Run all 7 API tests with CSV
         env:
           GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
         run: |
-          newman run 2373401010431_LeTranHoaiThien_GoRest.postman_collection.json \
-            -e 2373401010431_LeTranHoaiThien_GoRest_Env.postman_environment.json \
+          test -n "$GOREST_TOKEN" || (echo 'Missing GOREST_TOKEN secret' && exit 1)
+          newman run "2373401010431_LeTranHoaiThien_GoRest.postman_collection.json" \
+            -e "2373401010431_LeTranHoaiThien_GoRest_Env.postman_environment.json" \
             -d users.csv \
-            --folder "Positive_Cases" \
-            --folder "Negative_Cases" \
+            --folder Positive_Cases --folder Negative_Cases \
             --env-var "BASEURL=https://gorest.co.in/public/v2" \
             --env-var "token=$GOREST_TOKEN" \
-            --reporters cli \
-            --bail failure
+            --reporters cli
