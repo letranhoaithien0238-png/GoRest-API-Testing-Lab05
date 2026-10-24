@@ -1,34 +1,22 @@
-
 name: GoRest Production Monitor
-
 on:
   schedule:
     - cron: '0 * * * *'
   workflow_dispatch:
-
 jobs:
   monitor-api:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-
       - name: Install Newman
         run: npm install -g newman
-
-      - name: Run GoRest Production Monitor
-        env:
-          GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
+      - name: Run only monitor folder
         run: |
           newman run "2373401010431_LeTranHoaiThien_GoRest.postman_collection.json" \
             -e "2373401010431_LeTranHoaiThien_GoRest_Env.postman_environment.json" \
-            --folder "Monitor_Cases" \
+            --folder Monitor_Cases \
             --env-var "BASEURL=https://gorest.co.in/public/v2" \
-            --env-var "token=$GOREST_TOKEN" \
             --reporters cli
