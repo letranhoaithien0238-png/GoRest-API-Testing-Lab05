@@ -1,5 +1,5 @@
 
-name: GoRest Production Monitor
+name: GoRest API Monitoring
 
 on:
   schedule:
@@ -11,20 +11,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install Newman
-        run: npm install -g newman
-
-      - name: Run GoRest API Monitor
+      - name: Monitor GET Users API
         run: |
-          newman run GoRest_Collection.json \
-            -e GoRest_Enviroment.json \
-            --folder "Production_Monitor" \
-            --reporters cli
+          python3 - <<'PY'
+          import urllib.request
+          import time
+          import sys
+
+          url = "https://gorest.co.in/public/v2/users"
+
+          start = time.perf_counter()
+
+          try:
+              with urllib.request.urlopen(
+                  url, timeout=15
+              ) as response:
+                  status = response.status
+                  response.read()
+
+              elapsed_ms = (
+                  time.perf_counter() - start
+              ) * 1000
+
+              print(f"Status: {status}")
+              print(f"Response time: {elapsed_ms:.2f} ms")
+
+              if status != 200:
+                  print("FAIL: HTTP status is not 200")
+                  sys.exit(1)
+
+              if elapsed_ms >= 800:
+                  print("FAIL: Response time >= 800ms")
+                  sys.exit(1)
+
+              print("PASS: API response time < 800ms")
+
+          except Exception as error:
+              print(f"FAIL: {error}")
+              sys.exit(1)
+          PY
