@@ -1,0 +1,30 @@
+
+name: GoRest Production Monitor
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  monitor-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run GoRest API Monitor
+        run: |
+          newman run GoRest_Collection.json \
+            -e GoRest_Enviroment.json \
+            --folder "Production_Monitor" \
+            --reporters cli
