@@ -1,12 +1,14 @@
 
+
 name: GoRest API CI Pipeline
 
 on:
   push:
+  pull_request:
   workflow_dispatch:
 
 jobs:
-  api-test:
+  api-testing:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '18'
 
       - name: Install Newman
         run: npm install -g newman
@@ -25,9 +27,8 @@ jobs:
         env:
           GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
         run: |
-          newman run 2373401010431_LeTranHoaiThien_GoRest.postman_collection.json \
-            -e 2373401010431_LeTranHoaiThien_GoRest_Env.postman_environment.json \
+          newman run GoRest_Collection.json \
+            -e GoRest_Enviroment.json \
             -d users.csv \
-            --env-var "BASEURL=https://gorest.co.in/public/v2" \
             --env-var "token=$GOREST_TOKEN" \
             --reporters cli
