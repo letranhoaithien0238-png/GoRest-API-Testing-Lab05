@@ -1,0 +1,65 @@
+{
+  "info": {
+    "_postman_id": "4a360e5b-36df-4c25-96c1-da09786e59ca",
+    "name": "2373401010431_LeTranHoaiThien_GoRest",
+    "description": "Lab 05 GoRest API - một Collection dùng chung cho Functional API Testing và Monitor. Chọn folder khi chạy Newman.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Positive_Cases",
+      "item": []
+    },
+    {
+      "name": "Negative_Cases",
+      "item": []
+    },
+    {
+      "name": "Monitor_Cases",
+      "description": "Chạy độc lập cho Yêu cầu 4, GET users và kiểm tra thời gian phản hồi dưới 800ms.",
+      "item": [
+        {
+          "name": "Monitor - GET Users - 200 and under 800ms",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{BASEURL}}/users",
+              "host": [
+                "{{BASEURL}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Monitor GoRest GET /users; không yêu cầu token."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Monitor - Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Monitor - Response time < 800ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(800);",
+                  "});",
+                  "pm.test(\"Monitor - Response body is a JSON array\", function () {",
+                  "    pm.expect(pm.response.json()).to.be.an(\"array\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
